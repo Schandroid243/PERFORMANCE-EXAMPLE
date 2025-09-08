@@ -24,16 +24,27 @@ app.get("/timer", (req, res) => {
   res.send(`Ding ding ding !!!: ${process.pid}`);
 });
 
-if (cluster.isMaster) {
-  const numCores = os.cpus().length;
-  console.log(`Number of cores is: ${numCores}`);
-  console.log(`Master cluster is running with pid: ${process.pid}`);
-  for (let i = 0; i < numCores; i++) {
-    cluster.fork(); // create worker process for each physical cores
-  }
-} else {
-  console.log(`Worker started with pid: ${process.pid}`);
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
-}
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+
+// We don't want to use clustering in javascript directly because pm2 does it for us in development and production
+// if (cluster.isMaster) {
+//   const numOfCores = os.cpus().length;
+//   console.log(`Master process is ${process.pid}`);
+//   console.log(`Forking for ${numOfCores} cores`);
+
+//   for (let i = 0; i < numOfCores; i++) {
+//     cluster.fork();
+//   }
+
+//   cluster.on("exit", (worker, code, signal) => {
+//     console.log(`Worker ${worker.process.pid} died`);
+//     console.log("Forking another worker!");
+//     cluster.fork();
+//   });
+// } else {
+//   app.listen(PORT, () => {
+//     console.log(`Server running on port ${PORT} and process id is ${process.pid}`);
+//   });
+// }
