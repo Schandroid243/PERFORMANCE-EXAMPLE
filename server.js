@@ -18,8 +18,8 @@ function delay(duration) {
 
 app.get("/timer", (req, res) => {
   //delay the response
-  delay(9000);
-  res.send(`Ding ding ding !!!: ${process.pid}`);
+  delay(4000);
+  res.send(`Beep beep beep !!!: ${process.pid}`);
 });
 
 app.listen(PORT, () => {
